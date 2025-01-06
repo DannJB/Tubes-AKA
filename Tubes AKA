@@ -1,0 +1,45 @@
+import time
+import matplotlib.pyplot as plt
+
+# Algoritma iteratif untuk menghitung faktorial
+def factorial_iterative(n):
+    result = 1
+    for i in range(1, n + 1):
+        result *= i
+    return result
+
+# Algoritma rekursif untuk menghitung faktorial
+def factorial_recursive(n):
+    if n == 0 or n == 1:
+        return 1
+    return n * factorial_recursive(n - 1)
+
+# Fungsi untuk menghitung waktu eksekusi
+def measure_execution_time(func, n):
+    start_time = time.time()
+    func(n)
+    end_time = time.time()
+    return end_time - start_time
+
+# Membandingkan efisiensi kedua algoritma
+input_sizes = [1, 10, 50, 100, 500, 1000, 5000]  # Ukuran masukan
+iterative_times = []
+recursive_times = []
+
+for size in input_sizes:
+    iterative_times.append(measure_execution_time(factorial_iterative, size))
+    try:
+        recursive_times.append(measure_execution_time(factorial_recursive, size))
+    except RecursionError:
+        recursive_times.append(None)  # Untuk ukuran masukan besar, rekursi dapat mengalami batasan
+
+# Plot hasil analisis
+plt.figure(figsize=(10, 6))
+plt.plot(input_sizes, iterative_times, label="Iterative", marker="o")
+plt.plot(input_sizes[:len(recursive_times)], recursive_times, label="Recursive", marker="o")
+plt.title("Comparison of Iterative vs Recursive Factorial Algorithms")
+plt.xlabel("Input Size (n)")
+plt.ylabel("Execution Time (seconds)")
+plt.legend()
+plt.grid()
+plt.show()
